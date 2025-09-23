@@ -1,0 +1,6 @@
+# dependencies
+node_modules/
+
+# IDE / OS
+.vscode/
+.idea/
