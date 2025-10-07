@@ -12,11 +12,13 @@ function handleUsers(users) {
 
 async function getData() {
     try {
-        const todos = await getUsers();
-        handleUsers(todos);
+        const users = await getUsers();
+        handleUsers(users);
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
-getData();
+(async () => {
+    await getData();
+})();

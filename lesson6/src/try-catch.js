@@ -1,39 +1,48 @@
-function sendApiRequest(resource) {
-    throw new Error(`Error: Not able to fetch resource ${resource}`);
+async function sendApiRequest(resource) {
+    const response = await fetch(resource);
+    if (!response.ok) {
+        throw new Error(`Error: Not able to fetch resource ${resource}`);
+    }
+    return response.json();
 }
 
-function sendBackupApiRequest(resource) {
-    return {
-        resource: resource,
-        result: 'success',
-        status: 200
-    };
+async function sendBackupApiRequest(resource) {
+    const response = await fetch(resource);
+    if (!response.ok) {
+        throw new Error(`Error: Backup resource also failed ${resource}`);
+    }
+    return response.json();
 }
 
-function sendNextApiRequest() {
+async function sendNextApiRequest() {
     console.log('sending API request...');
 
-    let response;
+    let data;
     try {
-        response = sendApiRequest('https://jsonplaceholder.typicode.com/todos');
+        data = await sendApiRequest('https://api.github.com/users/wrong-endpoint');
     } catch (e) {
         console.log(e.message);
         if (e.message.includes('Not able to fetch resource')) {
-            response = sendBackupApiRequest('https://backup.jsonplaceholder.typicode.com/todos');
+            try {
+                data = await sendBackupApiRequest('https://api.github.com/users/octocat');
+            } catch (backupError) {
+                console.log(backupError.message);
+                throw new Error('Both primary and backup requests failed');
+            }
         } else {
             throw e;
         }
     }
 
-    console.log(response);
+    console.log(data);
 }
 
-function initializeTestData() {
+async function initializeTestData() {
     try {
-        sendNextApiRequest();
+        await sendNextApiRequest();
     } catch (e) {
         console.log(e.message);
-        console.log('failed to initialize test data');
+        console.log('Failed to initialize test data');
     }
 }
 
