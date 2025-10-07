@@ -38,4 +38,3 @@ function initializeTestData() {
 }
 
 initializeTestData();
-initializeTestData();
