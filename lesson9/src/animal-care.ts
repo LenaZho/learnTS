@@ -19,7 +19,7 @@ export function felineSizes(feline: Feline): void {
 }
 
 export function animalsField(animals: Animal[]): void {
-    console.log('\n Here we have the felines:');
+    console.log('\n Feline descriptions:');
 
     animals.forEach((animal, index) => {
         console.log(`\n${index + 1}. ${animal.name} the ${animal.breed}:`);

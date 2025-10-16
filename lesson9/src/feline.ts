@@ -1,17 +1,24 @@
 import { Animal, Hunter } from './animal';
+import { HuntingStrategy } from './hunting-strategies';
 
 export abstract class Feline implements Animal, Hunter {
     public name: string;
     public breed: string;
     protected habitat: string;
+    protected huntingStrategy: HuntingStrategy;
 
-    public constructor(name: string, breed: string, habitat: string) {
+    public constructor(
+        name: string,
+        breed: string,
+        habitat: string,
+        huntingStrategy: HuntingStrategy
+    ) {
         this.name = name;
         this.breed = breed;
         this.habitat = habitat;
+        this.huntingStrategy = huntingStrategy;
     }
 
-    // Common behaviors
     public makeSound(): string {
         return `${this.name} makes a feline sound`;
     }
@@ -25,7 +32,11 @@ export abstract class Feline implements Animal, Hunter {
     }
 
     public hunt(prey: string): string {
-        return `${this.name} hunts ${prey}`;
+        return this.huntingStrategy.hunt(this.name, prey);
+    }
+
+    public setHuntingStrategy(strategy: HuntingStrategy): void {
+        this.huntingStrategy = strategy;
     }
 
     public abstract getSize(): string;

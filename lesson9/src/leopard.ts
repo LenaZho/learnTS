@@ -1,17 +1,15 @@
 import { Feline } from './feline';
+import { LoneHuntingStrategy } from './hunting-strategies';
 
 // Leopard class
 export class Leopard extends Feline {
     private spotPattern: string;
 
     public constructor(name: string, spotPattern = 'dots') {
-        super(name, 'Leopard', 'various terrains');
+        super(name, 'Leopard', 'various terrains', new LoneHuntingStrategy());
         this.spotPattern = spotPattern;
     }
 
-    public makeSound(): string {
-        return `${this.name} makes a leopard call`;
-    }
 
     public getSize(): string {
         return 'Medium-Large';
@@ -20,10 +18,6 @@ export class Leopard extends Feline {
     // Leopard-specific behavior
     public showSpots(): string {
         return `${this.name} has beautiful ${this.spotPattern} spots`;
-    }
-
-    public hunt(prey: string): string {
-        return `${this.name} uses trees to ambush ${prey}`;
     }
 
     public climbTree(): string {

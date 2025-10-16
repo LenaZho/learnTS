@@ -1,11 +1,12 @@
 import { Feline } from './feline';
+import { LoneHuntingStrategy } from './hunting-strategies';
 
 // Tiger class
 export class Tiger extends Feline {
     private stripePattern: string;
 
     public constructor(name: string, stripePattern = 'visible') {
-        super(name, 'Tiger', 'jungle');
+        super(name, 'Tiger', 'jungle', new LoneHuntingStrategy());
         this.stripePattern = stripePattern;
     }
 
@@ -20,10 +21,6 @@ export class Tiger extends Feline {
     // Tiger-specific behavior
     public showStripes(): string {
         return `${this.name} displays ${this.stripePattern} orange and black stripes`;
-    }
-
-    public hunt(prey: string): string {
-        return `${this.name} stalks ${prey} alone through in ${this.habitat}`;
     }
 
     public swim(): string {
