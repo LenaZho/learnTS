@@ -1,0 +1,324 @@
+{
+	"info": {
+		"_postman_id": "6371e974-d44b-4504-bc07-f94888a74f33",
+		"name": "Learn Automation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21731777"
+	},
+	"item": [
+		{
+			"name": "ping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should respond to ping\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.text()).to.include(\"pong\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/ping",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "random",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Random joke should return JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Random joke should have setup and punchline\", function () {\r",
+							"    var joke = pm.response.json();\r",
+							"    pm.expect(joke).to.have.property('setup');\r",
+							"    pm.expect(joke).to.have.property('punchline');\r",
+							"    pm.expect(joke).to.have.property('type');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Joke setup and punchline should not be empty\", function () {\r",
+							"    var joke = pm.response.json();\r",
+							"    pm.expect(joke.setup).to.not.be.empty;\r",
+							"    pm.expect(joke.punchline).to.not.be.empty;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time should be less than 2000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/jokes/random",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"jokes",
+						"random"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10 randoms",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response contains 'id' field\", function () {",
+							"    var jokes = pm.response.json();",
+							"    jokes.forEach(function(joke, idx) {",
+							"        pm.expect(joke).to.have.property('id');",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"Ten jokes should return 10 items\", function () {",
+							"    var jokes = pm.response.json();",
+							"    pm.expect(jokes).to.have.lengthOf(10);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/jokes/ten",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"jokes",
+						"ten"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "types",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Types endpoint should return array of strings\", function () {",
+							"    var types = pm.response.json();",
+							"    pm.expect(types).to.be.an('array');",
+							"    if (types.length > 0) {",
+							"        pm.expect(types[0]).to.be.a('string');",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/types",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "dad jokes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains 'id' field\", function () {\r",
+							"    var jokes = pm.response.json();\r",
+							"    jokes.forEach(function(joke, idx) {\r",
+							"        pm.expect(joke).to.have.property('id');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"dad joke should have type 'dad'\", function () {\r",
+							"    var joke = pm.response.json();\r",
+							"    if (joke.type) {\r",
+							"        pm.expect(joke.type).to.equal('dad');\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/jokes/dad/random",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"jokes",
+						"dad",
+						"random"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "by id (positive)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return correct ID\", function () {\r",
+							"    var joke = pm.response.json();\r",
+							"    var requestedId = parseInt(pm.request.url.path[pm.request.url.path.length - 1]);\r",
+							"    pm.expect(joke.id).to.equal(requestedId);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should not be empty\", function () {\r",
+							"    var joke = pm.response.json();\r",
+							"    pm.expect(joke.setup).to.be.a('string').and.not.be.empty;\r",
+							"    pm.expect(joke.punchline).to.be.a('string').and.not.be.empty;\r",
+							"    pm.expect(joke.type).to.be.a('string').and.not.be.empty;\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/jokes/5",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"jokes",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "by id (negative)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Invalid ID should return 404\", function () {\r",
+							"    if (pm.response.code === 404) {\r",
+							"        pm.expect(pm.response.code).to.equal(404);\r",
+							"        var errorResponse = pm.response.json();\r",
+							"        pm.expect(errorResponse).to.have.property('type', 'error');\r",
+							"        pm.expect(errorResponse).to.have.property('message', 'joke not found');\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/jokes/99999",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"jokes",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
