@@ -1,0 +1,7 @@
+{
+    "extension": "ts",
+    "spec": "mocha/src/specs/**/*.spec.ts",
+    "require": ["ts-node/register", "mocha/hooks/global.hook.ts"],
+    "retries": 2,
+    "timeout": 120000
+}

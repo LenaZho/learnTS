@@ -1,0 +1,1291 @@
+{
+	"info": {
+		"_postman_id": "52cda548-4b6e-456c-b815-d0764155188d",
+		"name": "The Cat API Learning tests",
+		"description": "![image](https://cdn2.thecatapi.com/logos/thecatapi_256xW.png)\n\n## An open, free, read & write API all about Cats\nThe Cat API gives you access to 10000's of cat images\n- Upload your own images\n- Favourite or Vote on images\n- Get stats on your requests\n- Save a custom value with each request for each of your users\n\n## How is this free?\nMy goal is to create free, fun & useful public service API's, helping people learn to code, create awesome projects, and be a stable fixture in a turbulent world.\n\n## How do i get access?\nJust signup for an API Key from https://theCatAPI.com for free. I'm looking forward to seeing what you make!",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21731777"
+	},
+	"item": [
+		{
+			"name": "Images",
+			"item": [
+				{
+					"name": "/images/search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Response contains at least one image\", function () {",
+									"    pm.expect(pm.response.json().length).to.be.greaterThan(0);",
+									"});",
+									"",
+									"pm.test(\"First image has url property\", function () {",
+									"    var images = pm.response.json();",
+									"    pm.expect(images[0]).to.have.property('url');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}v1/images/search?size=med&mime_types=jpg&format=json&has_breeds=true&order=RANDOM&page=0&limit=1",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"images",
+								"search"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "med",
+									"description": "[optional] thumb , small, med or full - small is perfect for Discord"
+								},
+								{
+									"key": "mime_types",
+									"value": "jpg",
+									"description": "[optional] a comma separated strig of types to return e.g. jpg,png for static, or gif for gifs"
+								},
+								{
+									"key": "format",
+									"value": "json",
+									"description": "[optional] json | src"
+								},
+								{
+									"key": "has_breeds",
+									"value": "true",
+									"description": "[optional] - only return images with breed data"
+								},
+								{
+									"key": "order",
+									"value": "RANDOM",
+									"description": "[optional] default:RANDOM - RANDOM | ASC | DESC"
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"description": "[optional] paginate through results"
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"description": "[optional] number of results to return, up to 25 with a valid API-Key"
+								},
+								{
+									"key": "include_breeds",
+									"value": "1",
+									"description": "[optional] default to true. Adds the 'breed' object ot the image, only if an api",
+									"disabled": true
+								},
+								{
+									"key": "include_categories",
+									"value": "1",
+									"description": "[optional] default to true. Adds the 'breed' object ot the image, only if an api",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Searchs all approved images. Default is to reutrn RANDOM images, but with an API-Key you can use 'order=DESC' or 'order=ASC' along with the 'page' and 'limit' parameters to paginate through them in the order they were approved.\n\nPagination-Count, Pagination-Page, and Pagination-Limit headers are present in the response so you know the total number of images that can be paginated through for the passed search filters."
+					},
+					"response": []
+				},
+				{
+					"name": "/images/upload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.collectionVariables.set(\"objectId\", jsonData.id);\r",
+									"\r",
+									"var expectedId = pm.variables.get(\"objectId\");\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has id\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('id');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has url\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('url');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Image id is not empty\", function () {\r",
+									"    var imageId = pm.response.json().id;\r",
+									"    pm.expect(imageId).to.not.be.empty;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "postman-cloud:///1f0b6988-aae0-4530-ae7c-546282f8149c"
+								},
+								{
+									"key": "sub_id",
+									"value": "LenaZho",
+									"description": "[optional] - a string you can use to segment your images, e.g. knowing which of your own users uploaded it.",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "breed_ids",
+									"value": "",
+									"description": "[optional] comma separated string of breed ids contained in the image",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}v1/images/upload",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"images",
+								"upload"
+							]
+						},
+						"description": "Make sure you're using the right field to send the image, and Content-Type header"
+					},
+					"response": []
+				},
+				{
+					"name": "/images/upload Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.collectionVariables.set(\"objectIdforbreed\", jsonData.id);\r",
+									"\r",
+									"var expectedId = pm.variables.get(\"objectIdforbreed\");\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has id\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('id');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has url property\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('url');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Image id is not empty\", function () {\r",
+									"    var imageId = pm.response.json().id;\r",
+									"    pm.expect(imageId).to.not.be.empty;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "postman-cloud:///1f0b6988-aae0-4530-ae7c-546282f8149c"
+								},
+								{
+									"key": "sub_id",
+									"value": "LenaZho",
+									"description": "[optional] - a string you can use to segment your images, e.g. knowing which of your own users uploaded it.",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "breed_ids",
+									"value": "",
+									"description": "[optional] comma separated string of breed ids contained in the image",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}v1/images/upload",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"images",
+								"upload"
+							]
+						},
+						"description": "Make sure you're using the right field to send the image, and Content-Type header"
+					},
+					"response": []
+				},
+				{
+					"name": "/images/:image_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has id\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('id');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has url\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('url');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Image URL is valid\", function () {\r",
+									"    var imageUrl = pm.response.json().url;\r",
+									"    pm.expect(imageUrl).to.include('https');\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}v1/images/{{objectId}}",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"images",
+								"{{objectId}}"
+							],
+							"query": [
+								{
+									"key": "sub_id",
+									"value": "Lena",
+									"description": "[optional] if you want to save this request to your account stats",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Return 1 image matchin the id passed."
+					},
+					"response": []
+				},
+				{
+					"name": "/images/:image_id/analysis",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has id\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('id');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has url\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('url');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Image URL is valid\", function () {\r",
+									"    var imageUrl = pm.response.json().url;\r",
+									"    pm.expect(imageUrl).to.include('https');\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}v1/images/{{objectId}}",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"images",
+								"{{objectId}}"
+							],
+							"query": [
+								{
+									"key": "sub_id",
+									"value": "",
+									"description": "[optional] if you want to save this request to your account stats",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Get the raw analysis results for any uploaded image"
+					},
+					"response": []
+				},
+				{
+					"name": "/images/ (Your uploads)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has id\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"\t    if (Array.isArray(response)) {\r",
+									"            pm.expect(response[0]).to.have.property('id');\r",
+									"\t\t} else {\r",
+									"        pm.expect(response).to.have.property('id');\r",
+									"\t\t}\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has url\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"\t    if (Array.isArray(response)) {\r",
+									"            pm.expect(response[0]).to.have.property('url');\r",
+									"\t    } else {\r",
+									"        pm.expect(response).to.have.property('url');\r",
+									"        }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Image URL is valid\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    var imageUrl;\r",
+									"        if (Array.isArray(response)) {\r",
+									"        imageUrl = response[0].url;\r",
+									"        } else {\r",
+									"        imageUrl = response.url;\r",
+									"    }\r",
+									"    pm.expect(imageUrl).to.include('https');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Time of creation stated\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    if (response.created_at) {\r",
+									"\t\tpm.expect(response.created_at).to.not.be.empty;\r",
+									"        pm.expect(response.created_at).to.include('T');\r",
+									"}\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}v1/images/?limit=10&page=0&order=DESC",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"images",
+								""
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "[Optional] number of images to return valid  1 to 10 - default: 1"
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"description": "[Optional] only works if account_id is present to page through your own uploads"
+								},
+								{
+									"key": "order",
+									"value": "DESC",
+									"description": "[Optional] only works if account_id is present, either ASC or DESC - ascending or descending."
+								},
+								{
+									"key": "sub_id",
+									"value": "user1",
+									"description": "[Optional] If you want to ",
+									"disabled": true
+								},
+								{
+									"key": "breed_ids",
+									"value": "1,4,28",
+									"description": "[Optional] Id's of the breeds to filter by",
+									"disabled": true
+								},
+								{
+									"key": "category_ids",
+									"value": "4",
+									"description": "[Optional] Id's of the categories to filter by",
+									"disabled": true
+								},
+								{
+									"key": "format",
+									"value": "json",
+									"description": "[Optional] default is 'json', pass 'src' to redirect the request to the image's url - this is useful for setting the 'src' of an <img> tag.",
+									"disabled": true
+								},
+								{
+									"key": "original_filename",
+									"value": "",
+									"description": "[Optiona] filter to files you uploaded with the same name",
+									"disabled": true
+								},
+								{
+									"key": "user_id",
+									"value": "",
+									"description": "[Optional] default applied your unique user_id from welcome email, filter to only show images from your account that you have uploaded",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Only returns images from your account, uploaded via 'api/v1/images/upload'"
+					},
+					"response": []
+				},
+				{
+					"name": "/images/:image_id/breeds",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.collectionVariables.set(\"breedId\", jsonData.id);\r",
+									"\r",
+									"var expectedId = pm.variables.get(\"breedId\");\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has id\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('id');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is under 2 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"breed_id\": \"abys\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}v1/images/{{objectIdforbreed}}/breeds",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"images",
+								"{{objectIdforbreed}}",
+								"breeds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/images/:image_id/breeds",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an array with breed objects\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an('array');\r",
+									"    pm.expect(responseJson.length).to.be.greaterThan(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Each breed has required properties\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    responseJson.forEach(function(breed) {\r",
+									"        pm.expect(breed).to.have.property('weight');\r",
+									"        pm.expect(breed).to.have.property('id');\r",
+									"        pm.expect(breed).to.have.property('name');\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is under 2 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}v1/images/{{objectIdforbreed}}/breeds",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"images",
+								"{{objectIdforbreed}}",
+								"breeds"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favourites",
+			"item": [
+				{
+					"name": "/favourites",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.collectionVariables.set(\"favouriteId\", jsonData.id);\r",
+									"\r",
+									"var expectedId = pm.variables.get(\"favouriteId\");\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has message property\", function () {\r",
+									"\tpm.expect(pm.response.json()).to.have.property('message');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has id\", function () {\r",
+									"    pm.expect(pm.response.json()).to.have.property('id');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Favourite ID is a number\", function () {\r",
+									"    var favId = pm.response.json().id;\r",
+									"    pm.expect(favId).to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Favoriting was successful\", function () {\r",
+									"\tvar message = pm.response.json().message;\r",
+									"\tpm.expect(message).to.equal('SUCCESS');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"image_id\":\"{{objectId}}\",\n\t\"sub_id\": \"LenaZho\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}v1/favourites",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"favourites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/favourites",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an array\", function () {\r",
+									"\tpm.expect(pm.response.json()).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is under 2 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Each Favourite has basic properties\", function () {\r",
+									"\tvar votes = pm.response.json();\r",
+									"\t\tif (votes.length > 0) {\r",
+									"\t\t\tpm.expect(votes[0]).to.have.property('id');\r",
+									"\t\t\tpm.expect(votes[0]).to.have.property('image_id');\r",
+									"            pm.expect(votes[0]).to.have.property('sub_id');\r",
+									"\t\t}\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}v1/favourites",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"favourites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/favourites/:favourite_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is under 2 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Favourite has basic properties\", function () {\r",
+									"\tvar votes = pm.response.json();\r",
+									"\t\tif (votes.length > 0) {\r",
+									"\t\t\tpm.expect(votes[0]).to.have.property('id');\r",
+									"\t\t\tpm.expect(votes[0]).to.have.property('image_id');\r",
+									"            pm.expect(votes[0]).to.have.property('sub_id');\r",
+									"\t\t}\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}v1/favourites/232555438",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"favourites",
+								"232555438"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Votes",
+			"item": [
+				{
+					"name": "/votes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.collectionVariables.set(\"voteId\", jsonData.id);\r",
+									"\r",
+									"var expectedId = pm.variables.get(\"voteId\");\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has message property\", function () {\r",
+									"\tpm.expect(pm.response.json()).to.have.property('message');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has id property\", function () {\r",
+									"\tpm.expect(pm.response.json()).to.have.property('id');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Vote message says SUCCESS\", function () {\r",
+									"\tvar message = pm.response.json().message;\r",
+									"\tpm.expect(message).to.equal('SUCCESS');\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"image_id\":\"{{objectId}}\",\n\t\"sub_id\": \"LenaZho\",\n    \"value\":1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}v1/votes",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"votes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/votes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an array\", function () {\r",
+									"\tpm.expect(pm.response.json()).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is under 2 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Each vote has basic properties\", function () {\r",
+									"\tvar votes = pm.response.json();\r",
+									"\t\tif (votes.length > 0) {\r",
+									"\t\t\tpm.expect(votes[0]).to.have.property('id');\r",
+									"\t\t\tpm.expect(votes[0]).to.have.property('value');\r",
+									"            pm.expect(votes[0]).to.have.property('sub_id');\r",
+									"\t\t}\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}v1/votes",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"votes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/votes/:vote_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is under 2 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Vote has basic properties\", function () {\r",
+									"\tvar votes = pm.response.json();\r",
+									"\t\tif (votes.length > 0) {\r",
+									"\t\t\tpm.expect(votes[0]).to.have.property('id');\r",
+									"\t\t\tpm.expect(votes[0]).to.have.property('value');\r",
+									"            pm.expect(votes[0]).to.have.property('sub_id');\r",
+									"            pm.expect(votes[0]).to.have.property('image_1d');\r",
+									"\t\t}\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}v1/votes/{{voteId}}",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"votes",
+								"{{voteId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cleanup",
+			"item": [
+				{
+					"name": "/images/:image_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is under 2 seconds\", function () {\r",
+									"\tpm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"No error in response\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include('error');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}v1/images/{{objectId}}",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"images",
+								"{{objectId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/images/:image_id/breeds/:breed_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is quick\", function () {\r",
+									"\tpm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"No error in response\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include('error');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}v1/images/{{objectIdforbreed}}/breeds/{{breedId}}",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"images",
+								"{{objectIdforbreed}}",
+								"breeds",
+								"{{breedId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/favourites/:favourite_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has message\", function () {\r",
+									"\tpm.expect(pm.response.json()).to.have.property('message');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Delete was successful\", function () {\r",
+									"\tvar message = pm.response.json().message;\r",
+									"\tpm.expect(message).to.equal('SUCCESS');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}v1/favourites/{{favouriteId}}",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"favourites",
+								"{{favouriteId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/votes/:vote_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has message\", function () {\r",
+									"\tpm.expect(pm.response.json()).to.have.property('message');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Delete was successful\", function () {\r",
+									"\tvar message = pm.response.json().message;\r",
+									"\tpm.expect(message).to.equal('SUCCESS');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}v1/votes/{{voteId}}",
+							"host": [
+								"{{baseUrl}}v1"
+							],
+							"path": [
+								"votes",
+								"{{voteId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "live_9pEJtfNXQxiEbOLxgcUncL810pXXDlYLwsDSaIiJcYo4qj9NT6oIdHP5M60QTD9Q",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "x-api-key",
+			"value": "live_9pEJtfNXQxiEbOLxgcUncL810pXXDlYLwsDSaIiJcYo4qj9NT6oIdHP5M60QTD9Q"
+		},
+		{
+			"key": "baseUrl",
+			"value": ""
+		},
+		{
+			"key": "objectId",
+			"value": ""
+		},
+		{
+			"key": "sub_id",
+			"value": ""
+		},
+		{
+			"key": "breedId",
+			"value": ""
+		},
+		{
+			"key": "favouriteId",
+			"value": ""
+		},
+		{
+			"key": "voteId",
+			"value": ""
+		},
+		{
+			"key": "objectIdforbreed",
+			"value": ""
+		}
+	]
+}
