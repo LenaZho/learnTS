@@ -976,7 +976,7 @@
 									"\t\t\tpm.expect(votes[0]).to.have.property('id');\r",
 									"\t\t\tpm.expect(votes[0]).to.have.property('value');\r",
 									"            pm.expect(votes[0]).to.have.property('sub_id');\r",
-									"            pm.expect(votes[0]).to.have.property('image_1d');\r",
+									"            pm.expect(votes[0]).to.have.property('image_id');\r",
 									"\t\t}\r",
 									"});"
 								],
