@@ -1,0 +1,49 @@
+Тест кейси для CSS
+ТC-CSS-01
+Відкрити головну сторінку https://rozetka.com.ua/;
+
+Знайти поле пошуку: input[data-testid="search-suggest-input"] — вводимо samsung;
+
+Знайти кнопку "Знайти": button[data-testid="search-suggest-submit"] — натискаємо;
+
+Очікуємо: перехід на сторінку результатів
+
+ТC-CSS-02
+Знайти поле пошуку: input[data-testid="search-suggest-input"] — вводимо samsung;
+
+Очікуємо: rz-search-suggest-content.open контейнер підказок з’явився і видимий;
+
+ТC-CSS-03
+Знайти кнопку мікрофона: button[data-testid="search-suggest-mic"] — перевіряємо видимість та доступність (enabled, має aria-label="Голосовий пошук");
+
+Клікаємо button[data-testid="search-suggest-mic"];
+
+Очікуємо: запускається логіка голосового введення
+
+Опційно: use[href*="#icon-microphone"] — всередині є іконка мікрофона.
+
+
+Тест кейси для XPath
+ТC-XPath-01
+Відкрити головну сторінку https://rozetka.com.ua/;
+
+Знайти поле пошуку: //form//input[@data-testid='search-suggest-input' and @name='search'] — вводимо samsung;
+
+Знайти кнопку "Знайти": //button[@data-testid='search-suggest-submit' and @type='submit'] — натискаємо;
+
+Очікуємо: відкрилась сторінка пошуку, є результати
+
+ТC-XPath-02
+Знайти поле пошуку //form//input[@data-testid='search-suggest-input' and @name='search'] — вводимо samsung;
+
+Очікуємо: //rz-search-suggest[contains(@class,'open')] контейнер підказок з’явився і видимий
+
+ТC-XPath-03
+Знайти кнопку голосового пошуку:
+//button[@data-testid='search-suggest-mic' or @aria-label='Голосовий пошук'] — перевіряємо видимість та enabled.
+
+Клікаємо по кнопці з мікрофоном: //button[@data-testid='search-suggest-mic' or @aria-label='Голосовий пошук']
+
+Очікуємо: запускається логіка голосового введення
+
+Опційно: //button[@data-testid='search-suggest-mic']//use[contains(@href,'#icon-microphone')] — всередині є іконка мікрофона.
