@@ -23,5 +23,6 @@ export class MonobasePage {
 
   async goto() {
     await this.page.goto('https://base.monobank.ua/rusoriz');
+    await this.pageTitle.waitFor({ state: 'visible' });
   }
 }
