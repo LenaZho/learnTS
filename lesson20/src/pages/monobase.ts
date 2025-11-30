@@ -22,7 +22,10 @@ export class MonobasePage {
     }
 
     public async goto(): Promise<void> {
-        await this.page.goto('https://base.monobank.ua/rusoriz');
-        await this.pageTitle.waitFor({ state: 'visible' });
+        await this.page.goto('https://base.monobank.ua/rusoriz', {
+            timeout: 60000,
+            waitUntil: 'domcontentloaded'
+        });
+        await this.pageTitle.waitFor({ state: 'visible', timeout: 60000 });
     }
 }

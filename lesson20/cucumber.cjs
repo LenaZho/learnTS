@@ -7,7 +7,8 @@ const common = {
         snippetInterface: "async-await",
     },
     import: ['src/steps/**/*.ts', 'src/support/**/*.ts'],
-    tags: "not @skip"
+    tags: "not @skip",
+    timeout: 60000
 };
 
 const ci = {
@@ -26,7 +27,8 @@ const ci = {
 
 const local = {
     ...ci,
-    retry: 0
+    retry: 0,
+    parallel: 1
 };
 
 module.exports = {

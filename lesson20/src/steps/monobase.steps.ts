@@ -1,6 +1,8 @@
-import { Given, Then } from '@cucumber/cucumber';
+import { Given, Then, setDefaultTimeout } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import { CustomWorld } from '../support/world';
+
+setDefaultTimeout(60000);
 
 Given('I navigate to the Monobase page', async function (this: CustomWorld) {
     await this.monobasePage!.goto();

@@ -3,14 +3,18 @@ import { CustomWorld } from './world';
 
 setWorldConstructor(CustomWorld);
 
-Before(async function (this: CustomWorld) {
+Before({ timeout: 60000 }, async function (this: CustomWorld) {
     await this.init();
 });
 
-After(async function (this: CustomWorld, { result }) {
+After({ timeout: 60000 }, async function (this: CustomWorld, { result }) {
     if (result?.status === Status.FAILED && this.page) {
-        const screenshot = await this.page.screenshot({ fullPage: true });
-        await this.attach(screenshot, 'image/png');
+        try {
+            const screenshot = await this.page.screenshot({ fullPage: true });
+            await this.attach(screenshot, 'image/png');
+        } catch {
+            // Ignore screenshot errors
+        }
     }
 
     await this.cleanup();

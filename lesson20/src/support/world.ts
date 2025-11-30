@@ -15,22 +15,39 @@ export class CustomWorld extends World {
     public async init(): Promise<void> {
         this.browser = await chromium.launch({
             headless: false,
-            slowMo: 100
+            timeout: 60000
         });
         this.context = await this.browser.newContext();
         this.page = await this.context.newPage();
+        this.page.setDefaultTimeout(60000);
+        this.page.setDefaultNavigationTimeout(60000);
         this.monobasePage = new MonobasePage(this.page);
     }
 
     public async cleanup(): Promise<void> {
-        if (this.page) {
-            await this.page.close();
+        // Small delay to ensure all operations complete
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        try {
+            if (this.page) {
+                await this.page.close();
+            }
+        } catch {
+            // Ignore page close errors
         }
-        if (this.context) {
-            await this.context.close();
+        try {
+            if (this.context) {
+                await this.context.close();
+            }
+        } catch {
+            // Ignore context close errors
         }
-        if (this.browser) {
-            await this.browser.close();
+        try {
+            if (this.browser) {
+                await this.browser.close();
+            }
+        } catch {
+            // Ignore browser close errors
         }
     }
 }
