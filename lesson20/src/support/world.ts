@@ -12,14 +12,17 @@ export class CustomWorld extends World {
         super(options);
     }
 
-    public async init(): Promise<void> {
+    public static async initSharedBrowser(): Promise<void> {
         if (!CustomWorld.sharedBrowser) {
             CustomWorld.sharedBrowser = await chromium.launch({
                 headless: false,
                 timeout: 60000
             });
         }
-        this.context = await CustomWorld.sharedBrowser.newContext();
+    }
+
+    public async init(): Promise<void> {
+        this.context = await CustomWorld.sharedBrowser!.newContext();
         this.page = await this.context.newPage();
         this.page.setDefaultTimeout(60000);
         this.page.setDefaultNavigationTimeout(60000);
@@ -27,22 +30,11 @@ export class CustomWorld extends World {
     }
 
     public async cleanup(): Promise<void> {
-        // Small delay to ensure all operations complete
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        try {
-            if (this.page) {
-                await this.page.close();
-            }
-        } catch {
-            // Ignore page close errors
+        if (this.page) {
+            await this.page.close();
         }
-        try {
-            if (this.context) {
-                await this.context.close();
-            }
-        } catch {
-            // Ignore context close errors
+        if (this.context) {
+            await this.context.close();
         }
     }
 
