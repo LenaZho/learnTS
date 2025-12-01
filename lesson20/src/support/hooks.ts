@@ -1,7 +1,5 @@
-import { Before, After, setWorldConstructor, Status } from '@cucumber/cucumber';
+import { Before, After, AfterAll, Status } from '@cucumber/cucumber';
 import { CustomWorld } from './world';
-
-setWorldConstructor(CustomWorld);
 
 Before({ timeout: 60000 }, async function (this: CustomWorld) {
     await this.init();
@@ -18,4 +16,8 @@ After({ timeout: 60000 }, async function (this: CustomWorld, { result }) {
     }
 
     await this.cleanup();
+});
+
+AfterAll({ timeout: 60000 }, async function () {
+    await CustomWorld.closeSharedBrowser();
 });

@@ -1,2 +1,5 @@
-import { setDefaultTimeout } from '@cucumber/cucumber';
-setDefaultTimeout(999999999);
+import { setDefaultTimeout, setWorldConstructor } from '@cucumber/cucumber';
+import { CustomWorld } from './support/world';
+
+setDefaultTimeout(60000);
+setWorldConstructor(CustomWorld);
