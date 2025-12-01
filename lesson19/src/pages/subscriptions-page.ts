@@ -5,14 +5,16 @@ import { DailySupport } from './components/daily-support';
 export class SubscriptionsPage {
     public readonly page: Page;
     public readonly dailySupport: DailySupport;
+    public readonly url: string;
 
-    public constructor(page: Page) {
+    public constructor(page: Page, url = 'https://base.monobank.ua/rusoriz') {
         this.page = page;
+        this.url = url;
         this.dailySupport = new DailySupport(page);
     }
 
-    public async goto(url: string): Promise<void> {
-        await this.page.goto(url);
+    public async goto(): Promise<void> {
+        await this.page.goto(this.url);
         await this.page.waitForLoadState('networkidle');
     }
 

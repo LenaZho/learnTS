@@ -7,7 +7,7 @@ interface MyFixtures {
 
 export const test = base.extend<MyFixtures>({
     subscriptionsPage: async ({ page }: { page: Page }, use) => {
-        const subscriptionsPage = new SubscriptionsPage(page);
+        const subscriptionsPage = new SubscriptionsPage(page, 'https://base.monobank.ua/rusoriz');
         await use(subscriptionsPage);
     }
 });
