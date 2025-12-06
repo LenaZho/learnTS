@@ -30,11 +30,11 @@ jobs:
       run: npx playwright install --with-deps chromium
     
     - name: Run tests
-      run: npm test
+      run: npm run test
     
     - name: Create Allure report
       if: always()
-      run: npm run allure:generate
+      run: npx allure generate allure-results
     
     - name: Save report
       if: always()
