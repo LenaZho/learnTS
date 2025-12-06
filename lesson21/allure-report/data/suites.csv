@@ -1,0 +1,7 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","3857","check needed page elements are visible","chromium","Fri Dec 05 19:10:26 EET 2025","passed","Fri Dec 05 19:10:30 EET 2025","Monobase Page Tests","","",""
+"","3501","check social media buttons are visible","chromium","Fri Dec 05 19:10:31 EET 2025","passed","Fri Dec 05 19:10:34 EET 2025","Monobase Page Tests","","",""
+"","3054","check social media buttons have correct links","chromium","Fri Dec 05 19:10:34 EET 2025","passed","Fri Dec 05 19:10:38 EET 2025","Monobase Page Tests","","",""
+"","3313","check daily support elements","chromium","Fri Dec 05 19:10:44 EET 2025","passed","Fri Dec 05 19:10:47 EET 2025","Subscription Page Tests","","",""
+"","3517","check subscription card elements","chromium","Fri Dec 05 19:10:40 EET 2025","passed","Fri Dec 05 19:10:44 EET 2025","Subscription Page Tests","","",""
+"","2697","Get Started button is clickable","chromium","Fri Dec 05 19:10:38 EET 2025","passed","Fri Dec 05 19:10:40 EET 2025","Monobase Page Tests","","",""
