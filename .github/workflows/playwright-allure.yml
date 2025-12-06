@@ -34,7 +34,7 @@ jobs:
     
     - name: Create Allure report
       if: always()
-      run: npx allure generate allure-results
+      run: npx allure generate allure-results --clean
     
     - name: Save report
       if: always()
