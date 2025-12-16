@@ -1,0 +1,95 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: rpuser
+      POSTGRES_PASSWORD: rppass
+      POSTGRES_DB: reportportal
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - reportportal
+
+  minio:
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    command: server /data
+    volumes:
+      - minio_data:/data
+    networks:
+      - reportportal
+
+  rabbitmq:
+    image: rabbitmq:3.11-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+    networks:
+      - reportportal
+
+  gateway:
+    image: traefik:v2.10
+    ports:
+      - "8081:8081"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--entrypoints.web.address=:8081"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - reportportal
+
+  index:
+    image: reportportal/service-index:5.11.0
+    ports:
+      - "8080:8080"
+    environment:
+      - LB_URL=http://gateway:8081
+    networks:
+      - reportportal
+
+  api:
+    image: reportportal/service-api:5.11.0
+    environment:
+      - RP_DB_HOST=postgres
+      - RP_DB_USER=rpuser
+      - RP_DB_PASS=rppass
+      - RP_BINARYSTORE_TYPE=minio
+      - RP_BINARYSTORE_MINIO_ENDPOINT=http://minio:9000
+      - RP_BINARYSTORE_MINIO_ACCESSKEY=minio
+      - RP_BINARYSTORE_MINIO_SECRETKEY=minio123
+      - RP_AMQP_HOST=rabbitmq
+      - RP_AMQP_USER=rabbitmq
+      - RP_AMQP_PASS=rabbitmq
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
+      - "traefik.http.services.api.loadbalancer.server.port=8585"
+    networks:
+      - reportportal
+
+  ui:
+    image: reportportal/service-ui:5.11.0
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ui.rule=PathPrefix(`/ui`)"
+      - "traefik.http.services.ui.loadbalancer.server.port=8080"
+    networks:
+      - reportportal
+
+  expense-tracker:
+    build: ./Expense-Tracker-App-With-React.JS-main
+    ports:
+      - "3000:80"
+    networks:
+      - reportportal
+
+volumes:
+  postgres_data:
+  minio_data:
+
+networks:
+  reportportal:

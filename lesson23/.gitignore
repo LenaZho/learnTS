@@ -1,0 +1,25 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+.auth/
+
+# Allure
+allure-results/
+allure-report/
+reports/
+# Environment files
+.env
+.env.local
+
+# Docker volumes
+postgres_data/
+elasticsearch_data/
+minio_data/
+
+# ReportPortal
+.reportportal/

@@ -1,0 +1,43 @@
+name: Test Docker App
+
+on:
+  push:
+    branches: [ main, master, lesson23 ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start Docker
+        run: docker-compose up -d
+
+      - name: Wait for app
+        run: |
+          echo "⏳ Waiting for Expense Tracker to start..."
+          sleep 30
+          curl http://localhost:3000 || echo "App might need more time"
+
+      - name: Install test browser
+        run: npx playwright install chromium --with-deps
+
+      - name: Run tests
+        run: npx playwright test
+        env:
+          BASE_URL: http://localhost:3000
+
+      - name: Stop Docker
+        if: always()
+        run: docker-compose down
