@@ -1,0 +1,41 @@
+name: Run Tests Allure
+
+on:
+  push:
+    branches: [ main, master, finalproject ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: finalproject
+    steps:
+    - name: Get code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    
+    - name: Install packages
+      run: npm ci
+    
+    - name: Install browser
+      run: npx playwright install --with-deps chromium
+    
+    - name: Run tests
+      run: npm run test
+    
+    - name: Save report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-results
+        path: finalproject/allure-results/
+        retention-days: 30
