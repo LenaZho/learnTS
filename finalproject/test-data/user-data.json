@@ -1,0 +1,47 @@
+{
+    "validUser": {
+        "name": "John Doe",
+        "email": "johndoe.test{{timestamp}}@example.com",
+        "password": "Test@12345",
+        "title": "Mr",
+        "birth_date": "15",
+        "birth_month": "6",
+        "birth_year": "1990",
+        "firstname": "John",
+        "lastname": "Doe",
+        "company": "Test Company",
+        "address1": "123 Test Street",
+        "address2": "Apt 4B",
+        "country": "United States",
+        "zipcode": "12345",
+        "state": "California",
+        "city": "Los Angeles",
+        "mobile_number": "+1234567890"
+    },
+    "updateUser": {
+        "name": "Jane Smith",
+        "email": "janesmith.test{{timestamp}}@example.com",
+        "password": "NewTest@12345",
+        "title": "Mrs",
+        "birth_date": "20",
+        "birth_month": "8",
+        "birth_year": "1992",
+        "firstname": "Jane",
+        "lastname": "Smith",
+        "company": "Updated Company",
+        "address1": "456 New Street",
+        "address2": "Suite 10",
+        "country": "Canada",
+        "zipcode": "54321",
+        "state": "Ontario",
+        "city": "Toronto",
+        "mobile_number": "+9876543210"
+    },
+    "loginUser": {
+        "email": "test.user@example.com",
+        "password": "Password123"
+    },
+    "searchProduct": {
+        "search_product": "top"
+    }
+}
