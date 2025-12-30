@@ -5,11 +5,16 @@ import { ProductsPage } from '../../pages/products.page';
 import { ProductDetailsPage } from '../../pages/product-details.page';
 
 test.describe('Cart Tests', () => {
-    test('View cart', async ({ page }) => {
-        const homePage = new HomePage(page);
-        const productsPage = new ProductsPage(page);
-        const productDetailsPage = new ProductDetailsPage(page);
-        const cartPage = new CartPage(page);
+    let homePage: HomePage;
+    let productsPage: ProductsPage;
+    let productDetailsPage: ProductDetailsPage;
+    let cartPage: CartPage;
+
+    test.beforeEach(async ({ page }) => {
+        homePage = new HomePage(page);
+        productsPage = new ProductsPage(page);
+        productDetailsPage = new ProductDetailsPage(page);
+        cartPage = new CartPage(page);
 
         await homePage.navigateTo();
         await homePage.clickProducts();
@@ -19,18 +24,11 @@ test.describe('Cart Tests', () => {
         await cartPage.verifyCartPage();
     });
 
-    test('Proceed to checkout', async ({ page }) => {
-        const homePage = new HomePage(page);
-        const productsPage = new ProductsPage(page);
-        const productDetailsPage = new ProductDetailsPage(page);
-        const cartPage = new CartPage(page);
+    test('View cart', async ({ page }) => {
+        // Cart is already verified in beforeEach
+    });
 
-        await homePage.navigateTo();
-        await homePage.clickProducts();
-        await productsPage.clickFirstProduct();
-        await productDetailsPage.addToCart();
-        await productDetailsPage.viewCartFromModal();
-        await cartPage.verifyCartPage();
+    test('Proceed to checkout', async ({ page }) => {
         await cartPage.proceedToCheckout();
     });
 });

@@ -7,6 +7,8 @@ import { generateRandomUser } from '../../test-data/testdata';
 
 test.describe('User Login Tests', () => {
     let userData: any;
+    let homePage: HomePage;
+    let loginPage: LoginPage;
 
     test.beforeAll(async ({ browser }) => {
         const context = await browser.newContext();
@@ -31,32 +33,24 @@ test.describe('User Login Tests', () => {
         await context.close();
     });
 
-    test('Login success', async ({ page }) => {
-        const homePage = new HomePage(page);
-        const loginPage = new LoginPage(page);
-
+    test.beforeEach(async ({ page }) => {
+        homePage = new HomePage(page);
+        loginPage = new LoginPage(page);
         await homePage.navigateTo();
         await homePage.clickSignupLogin();
+    });
+
+    test('Login success', async ({ page }) => {
         await loginPage.login(userData.email, userData.password);
         await homePage.verifyUserLoggedIn(userData.name);
     });
 
     test('Show error on wrong password', async ({ page }) => {
-        const homePage = new HomePage(page);
-        const loginPage = new LoginPage(page);
-
-        await homePage.navigateTo();
-        await homePage.clickSignupLogin();
         await loginPage.login('wrong@testmail.com', 'wrongpass');
         await loginPage.verifyLoginError();
     });
 
     test('Logout success', async ({ page }) => {
-        const homePage = new HomePage(page);
-        const loginPage = new LoginPage(page);
-
-        await homePage.navigateTo();
-        await homePage.clickSignupLogin();
         await loginPage.login(userData.email, userData.password);
         await homePage.verifyUserLoggedIn(userData.name);
         await homePage.logout();
